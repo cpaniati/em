@@ -1,11 +1,23 @@
 <HTML>
 <HEAD>
 	<TITLE>Eliza (elizabot.js)</TITLE>
+
+  <!-- CSS Styles -->
+<style>
+  .speech {border: 1px solid #DDD; width: 300px; padding: 0; margin: 0}
+  .speech input {    border: 0;
+    width: 260px;
+    display: inline-block;
+    height: 40px;
+    padding: 20px;}
+  .speech img {float: right; width: 40px }
+</style>
+
 	<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" SRC="elizabot.js"></SCRIPT>
 	<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" SRC="elizadata.js"></SCRIPT>
 
 <SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-<!--
+
 
 var eliza = new ElizaBot();
 var elizaLines = new Array();
@@ -14,12 +26,16 @@ var displayCols = 60;
 var displayRows = 20;
 
 function elizaReset() {
+  console.log('elizaReset');
 	eliza.reset();
 	elizaLines.length = 0;
 	elizaStep();
 }
 
+//document.forms.e_form.e_input.value.onchange=function(){elizaStep();};
+
 function elizaStep() {
+  console.log('elizaStep');
 	var f = document.forms.e_form;
 	var userinput = f.e_input.value;
 	if (eliza.quit) {
@@ -29,10 +45,14 @@ function elizaStep() {
 		return;
 	}
 	else if (userinput != '') {
+    var elizaRpl = eliza.transform(userinput);
 		var usr = 'YOU:   ' + userinput;
-		var rpl ='ELIZA: ' + eliza.transform(userinput);
-		elizaLines.push(usr);
-		elizaLines.push(rpl);
+    elizaLines.push(usr);
+    if(elizaRpl != ''){
+      var rpl ='ELIZA: ' + elizaRpl;
+      elizaLines.push(rpl);
+    }
+		
 		// display nicely
 		// (fit to textarea with last line free - reserved for extra line caused by word wrap)
 		var temp  = new Array();
@@ -57,6 +77,36 @@ function elizaStep() {
 
 //-->
 </SCRIPT>
+
+<script>
+  function startDictation() {
+ 
+    if (window.hasOwnProperty('webkitSpeechRecognition')) {
+ 
+      var recognition = new webkitSpeechRecognition();
+ 
+      recognition.continuous = false;
+      recognition.interimResults = false;
+ 
+      recognition.lang = "en-US";
+      recognition.start();
+ 
+      recognition.onresult = function(e) {
+        document.getElementById('transcript').value
+                                 = e.results[0][0].transcript;
+        recognition.stop();
+        window.setTimeout(elizaStep,100);
+        //document.getElementById('e_form').submit();
+      };
+ 
+      recognition.onerror = function(e) {
+        recognition.stop();
+      }
+ 
+    }
+  }
+</script>
+
 </HEAD>
 
 <BODY TOPMARGIN="0" LEFTMARGIN="0" RIGHTMARGIN="0" BOTTOMMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" STYLE="border:0" onload="window.setTimeout('elizaReset()',100)"><A NAME="top"></A>
@@ -65,16 +115,20 @@ function elizaStep() {
 <P>&nbsp;</P>
 <H3>Eliza</H3>
 <TABLE BORDER="0" CELLSPACING="10" CELLPADDING="0">
-<FORM NAME="e_form" onsubmit="elizaStep();return false">
+<FORM id = "e_form" NAME="e_form"  onsubmit="elizaStep();return false">
 <TR><TD COLSPAN="2"><TEXTAREA NAME="e_display" COLS="60" ROWS="20"></TEXTAREA></TD></TR>
 <TR VALIGN="middle">
-	<TD><INPUT TYPE="text" NAME="e_input" SIZE="50"></TD>
+	<!--<TD><INPUT TYPE="text" NAME="e_input" SIZE="50" autocomplete="off" x-webkit-speech></TD>-->
+  <TD><div class="speech">
+    <input onchange="elizaStep();return false" type="text" name="e_input" id="transcript" placeholder="Speak" />
+    <img onclick="startDictation()" src="http://www.imgur.com/cHidSVu.gif" />
+  </div></TD>
 	<TD ALIGN="right"><INPUT TYPE="submit" VALUE="&nbsp;Talk&nbsp;"> <INPUT TYPE="reset" VALUE="Reset" onClick="window.setTimeout('elizaReset()',100)"></TD>
 </TR>
 </FORM>
 </TABLE>
 </CENTER>
-
+<!--
 <P>&nbsp;</P>
 <P ALIGN="center">For a comfortable terminal-like interface see the <A HREF="http://www.masswerk.at/elizabot/eliza.html">ELIZA-Terminal</A>.</P>
 <P>&nbsp;</P>
@@ -233,6 +287,6 @@ Note:   &quot;elizaPostTransforms&quot; is not a standard ELIZA feature and was 
 <TR><TD COLSPAN="2" STYLE="font-family: arial,helvetica,sans-serif; font-size: 12px;">N. Landsteiner 2005; &lt;<A HREF="http://www.masswerk.at/" TARGET="_blank">http://www.masswerk.at</A>&gt;</SMALL></TD></TR>
 <TR><TD COLSPAN="2">&nbsp;</TD></TR>
 </TABLE>
-
+-->
 </BODY>
 </HTML>

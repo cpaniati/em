@@ -3,10 +3,10 @@
 // [cf: Communications of the ACM, Vol. 9, #1 (January 1966): p 36-45.]
 
 var elizaInitials = [
-"How do you do.  Please tell me your problem.",
+"Hello there!  What do you want to talk about today ?",
 // additions (not original)
-"Please tell me what's been bothering you.",
-"Is something troubling you ?"
+"Can you tell me a little about what's been bothering you ?",
+"Hey there. Is something troubling you ?"
 ];
 
 var elizaFinals = [
@@ -90,21 +90,24 @@ var elizaKeywords = [
 
 ["xnone", 0, [
  ["*", [
-     "I'm not sure I understand you fully.",
+     ""
+     /*"I'm not sure I understand you fully.",
      "Please go on.",
      "What does that suggest to you ?",
      "Do you feel strongly about discussing such things ?",
      "That is interesting.  Please continue.",
      "Tell me more about that.",
-     "Does talking about this bother you ?"
+     "Does talking about this bother you ?"*/
   ]]
 ]],
 ["sorry", 0, [
  ["*", [
+      "That's okay, you don't need to apologize."
+      /*
      "Please don't apologise.",
      "Apologies are not necessary.",
      "I've told you that apologies are not required.",
-     "It did not bother me.  Please continue."
+     "It did not bother me.  Please continue."*/
   ]]
 ]],
 ["apologise", 0, [
@@ -228,11 +231,13 @@ var elizaKeywords = [
 ]],
 ["hello", 0, [
  ["*", [
-     "How do you do.  Please state your problem.",
-     "Hi.  What seems to be your problem ?"
+     /*"How do you do.  Please state your problem.",
+     "Hi.  What seems to be your problem ?",*/
+     "Hi!  What do you want to talk about today ?",
+     "Hey there.  What seems to be your problem ?"
   ]]
 ]],
-["computer", 50, [
+/*["computer", 50, [
  ["*", [
      "Do computers worry you ?",
      "Why do you mention computers ?",
@@ -242,7 +247,7 @@ var elizaKeywords = [
      "What do you think about machines ?",
      "You don't think I am a computer program, do you ?"
   ]]
-]],
+]],*/
 ["am", 0, [
  ["* am i *", [
      "Do you believe you are (2) ?",
@@ -372,6 +377,7 @@ var elizaKeywords = [
      "Of what does feeling (2) remind you ?"
   ]],
  ["* i * you *", [
+     "I (2) you too!",
      "Perhaps in your fantasies we (2) each other.",
      "Do you wish to (2) me ?",
      "You seem to need to (2) me.",

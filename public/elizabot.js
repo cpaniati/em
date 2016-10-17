@@ -253,7 +253,8 @@ ElizaBot.prototype.transform = function(text) {
 		if (k>=0) rpl=this._execRule(k);
 	}
 	// return reply or default string
-	return (rpl!='')? rpl : 'I am at a loss for words.';
+	return (rpl!='')? rpl : '';
+	//return (rpl!='')? rpl : 'I am at a loss for words.';
 }
 
 ElizaBot.prototype._execRule = function(k) {
