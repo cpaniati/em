@@ -102,7 +102,10 @@ var elizaKeywords = [
 ]],
 ["sorry", 0, [
  ["*", [
-      "That's okay, you don't need to apologize."
+      "That's okay, you don't need to apologize.",
+      "Apologies are not necessary.",
+      "That's okay. Please continue.",
+      "Please go on."
       /*
      "Please don't apologise.",
      "Apologies are not necessary.",
@@ -265,6 +268,9 @@ var elizaKeywords = [
   ]]
 ]],
 ["are", 0, [
+  ["* are you real", [
+     "Of course I'm real! :P"
+  ]],
  ["* are you *", [
      "Why are you interested in whether I am (2) or not ?",
      "Would you prefer if I weren't (2) ?",

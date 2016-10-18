@@ -44,7 +44,24 @@
   vers 1.1: lambda functions in RegExps are currently a problem with too many browsers.
             changed code to work around.
 */
-
+function findReactionType(k){
+	switch(k) {
+    case 24:
+        return 'hello';
+        break;
+    case 28:
+        return 'I am feeling..';
+        break;
+    case 25:
+        return 'sad';
+        break;
+    case 25:
+        return 'happy';
+        break;
+    default:
+        return '';
+}
+}
 
 function ElizaBot(noRandomFlag) {
 	this.noRandom= (noRandomFlag)? true:false;
@@ -272,12 +289,21 @@ ElizaBot.prototype._execRule = function(k) {
 				if (ri>=reasmbs.length) {
 					ri=0;
 					this.lastchoice[k][i]=-1;
+					document.getElementById('emReaction').innerHTML = findReactionType(String(k)+String(i));
+
 				}
 			}
 			else {
 				this.lastchoice[k][i]=ri;
+				document.getElementById('emReaction').innerHTML = findReactionType(String(k)+String(i));
 			}
+			console.log("k+i="+String(k)+String(i));
 			var rpl=reasmbs[ri];
+			console.log('match:\nkey: '+elizaKeywords[k][0]+
+				'\nrank: '+elizaKeywords[k][1]+
+				'\ndecomp: '+decomps[i][0]+
+				'\nreasmb: '+rpl+
+				'\nmemflag: '+memflag);
 			if (this.debug) alert('match:\nkey: '+elizaKeywords[k][0]+
 				'\nrank: '+elizaKeywords[k][1]+
 				'\ndecomp: '+decomps[i][0]+
@@ -312,6 +338,7 @@ ElizaBot.prototype._execRule = function(k) {
 				}
 				rpl=lp+rp;
 			}
+			console.log('pt:'+rpl);
 			rpl=this._postTransform(rpl);
 			if (memflag) this._memSave(rpl)
 			else return rpl;
