@@ -3,7 +3,7 @@
 // [cf: Communications of the ACM, Vol. 9, #1 (January 1966): p 36-45.]
 
 var elizaInitials = [
-"Hi! How are you feeling today ?",
+"Hi! How is your day going ?",
 "Hey there. What's new ?"
 ];
 
@@ -64,9 +64,8 @@ var elizaSynons = {
 "desire": ["want", "need"],
 "everyone": ["everybody", "nobody", "noone"],
 "family": ["mother", "mom", "father", "dad", "sister", "brother", "wife", "children", "child"],
-"happy": ["elated", "glad", "better","good","peachy","great","super","awesome","fantastic","fabulous","amazing","well","blessed"],
-"sad": ["unhappy", "depressed", "sick","awful","shit","shitty","bad","terrible","horrible","down","gloomy","low","blegh","bummed"],
-"neutral": ["okay", "OK", "Ok", "alright", "fine"]
+"happy": ["elated", "glad", "better"],
+"sad": ["unhappy", "depressed", "sick"]
 };
 
 var elizaKeywords = [
@@ -235,7 +234,7 @@ var elizaKeywords = [
  ["*", [
      /*"How do you do.  Please state your problem.",
      "Hi.  What seems to be your problem ?",*/
-     "Hi! How are you feeling today ?",
+     "Hi! How is your day going ?",
      "Hey there. What's new ?"
   ]]
 ]],
@@ -334,14 +333,13 @@ var elizaKeywords = [
   ]],
  ["* i am* @sad *", [
      "I am sorry to hear that you are (3).",
-     "I'm sure it's not pleasant to be (3). When did you start feeling this way ?",
+     "Do you think coming here will help you not to be (3) ?",
+     "I'm sure it's not pleasant to be (3).",
      "Can you explain what made you (3) ?"
   ]],
  ["* i am* @happy *", [
-     "What makes you (3) just now ?",
-     "Can you explain why you are suddenly (3) ?"
-  ]],
-  ["* i am* @neutral *", [
+     "How have I helped you to be (3) ?",
+     "Has your treatment made you (3) ?",
      "What makes you (3) just now ?",
      "Can you explain why you are suddenly (3) ?"
   ]],

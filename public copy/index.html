@@ -12,11 +12,9 @@
     padding: 20px;}
   .speech img {float: right; width: 40px }
 </style>
-  
+  <script src= "https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
 	<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" SRC="elizabot.js"></SCRIPT>
 	<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" SRC="elizadata.js"></SCRIPT>
-
-
 
 <SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 
@@ -77,7 +75,7 @@ function elizaStep() {
         f.e_display.value = elizaLines.join('\n');
 
       }
-      console.log(elizaLines);
+
   },Math.floor(Math.random() * (elizaMinWaitTime+1000 - elizaMinWaitTime)) + elizaMinWaitTime);
 		
 		// display nicely

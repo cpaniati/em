@@ -1,0 +1,420 @@
+<HTML>
+<HEAD>
+	<TITLE>EM [by HelloPress]</TITLE>
+
+  <!-- CSS Styles -->
+<style>
+  .speech {border: 1px solid #DDD; width: 300px; padding: 0; margin: 0}
+  .speech input {    border: 0;
+    width: 260px;
+    display: inline-block;
+    height: 40px;
+    padding: 20px;}
+  .speech img {float: right; width: 40px }
+
+  #em-container, #em-radar-container{
+    width:100%;
+    height:100%;
+    position:absolute;
+  }
+  #em-container{
+    z-index:100;
+  }
+  #eliza{
+    font-family:avenir;
+    position:relative;
+    z-index:1000;
+  }
+
+  #e_display{
+    background: rgba(255,255,255,.7);
+    border-color: #ddd;
+  }
+
+  #sadBG{
+    position:fixed;
+    width:100%;
+    height:100%;
+    opacity:0;
+    transition:opacity 4s;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#bcbae2+0,9794d2+100 */
+    background: #bcbae2; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  #bcbae2 0%, #9794d2 100%); /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover,  #bcbae2 0%,#9794d2 100%); /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center,  #bcbae2 0%,#9794d2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bcbae2', endColorstr='#9794d2',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  }
+
+  #happyBG{
+    position:fixed;
+    width:100%;
+    height:100%;
+    opacity:0;
+    transition:opacity 4s;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fffdf4+0,fffcc2+100 */
+    background: #fffdf4; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  #fffdf4 0%, #fffcc2 100%); /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover,  #fffdf4 0%,#fffcc2 100%); /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center,  #fffdf4 0%,#fffcc2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fffdf4', endColorstr='#fffcc2',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  }
+
+  #sadBG.active{
+    opacity:1;
+  }
+
+  #happyBG.active{
+    opacity:1;
+  }
+
+  #emBody{
+    transition: fill 1s;
+    fill:#FF9E9E;
+  }
+
+  .emRadar{
+    transition: fill 3s;
+    fill:#FF9E9E;
+  }
+
+  .emRadar.sad{
+    fill:#986CEB;
+  }
+
+  .emRadar.happy{
+    fill:#FF9E9E;
+  }
+
+  #emBody.sad{
+    fill:#986CEB;
+  }
+
+  #emBody.happy{
+    fill:#FF9E9E;
+  }
+
+</style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+  <script LANGUAGE="JavaScript" TYPE="text/javascript" src= "https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
+
+	<SCRIPT LANGUAGE="javaScript" TYPE="text/javascript" SRC="elizabot.js"></SCRIPT>
+
+	<SCRIPT LANGUAGE="javaScript" TYPE="text/javascript" SRC="elizadata.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="javaScript" TYPE="text/javascript">
+
+var elizaMinWaitTime = 5000;
+
+var eliza = new ElizaBot();
+var elizaLines = new Array();
+
+var displayCols = 60;
+var displayRows = 20;
+
+var emBody;
+var currentMood = 'neutral';
+window.radarSpeed = 2000;
+
+function elizaReset() {
+  console.log('elizaReset');
+	eliza.reset();
+	elizaLines.length = 0;
+	elizaStep();
+}
+
+//document.forms.e_form.e_input.value.onchange=function(){elizaStep();};
+
+function elizaStep() {
+  console.log('elizaStep');
+	var f = document.forms.e_form;
+	var userinput = f.e_input.value;
+	if (eliza.quit) {
+		f.e_input.value = '';
+		if (confirm("This session is over.\nStart over?")) elizaReset();
+		f.e_input.focus();
+		return;
+	}
+	else if (userinput != '') {
+    var elizaRpl = eliza.transform(userinput);
+		var usr = 'YOU:   ' + userinput;
+    elizaLines.push(usr);
+    setTimeout(function(){
+      document.getElementById('elizaHeader').innerHTML = 'EM is typing..';
+
+    },Math.floor(Math.random() * (1500 - 500)) + 500);
+    
+    setTimeout(function(){
+
+      if(window.timeToRespond){
+
+        document.getElementById('elizaHeader').innerHTML = 'EM';
+        if(elizaRpl != ''){
+          var rpl ='EM: ' + elizaRpl;
+          elizaLines.push(rpl);
+        }
+        // display nicely
+        // (fit to textarea with last line free - reserved for extra line caused by word wrap)
+        var temp  = new Array();
+        var l = 0;
+        for (var i=elizaLines.length-1; i>=0; i--) {
+          l += 1 + Math.floor(elizaLines[i].length/displayCols);
+          if (l >= displayRows) break
+          else temp.push(elizaLines[i]);
+        }
+        elizaLines = temp.reverse();
+        f.e_display.value = elizaLines.join('\n');
+
+      }
+
+  },Math.floor(Math.random() * (elizaMinWaitTime+1000 - elizaMinWaitTime)) + elizaMinWaitTime);
+		
+		// display nicely
+		// (fit to textarea with last line free - reserved for extra line caused by word wrap)
+		var temp  = new Array();
+		var l = 0;
+		for (var i=elizaLines.length-1; i>=0; i--) {
+			l += 1 + Math.floor(elizaLines[i].length/displayCols);
+			if (l >= displayRows) break
+			else temp.push(elizaLines[i]);
+		}
+		elizaLines = temp.reverse();
+		f.e_display.value = elizaLines.join('\n');
+	}
+	else if (elizaLines.length == 0) {
+		// no input and no saved lines -> output initial
+    setTimeout(function(){
+      var initial = 'EM: ' + eliza.getInitial();
+      elizaLines.push(initial);
+      f.e_display.value = initial + '\n';
+    },1000);
+	 
+	}
+	f.e_input.value = '';
+	f.e_input.focus();
+  window.setTimeout(startDictation,100);
+}
+
+//-->
+</SCRIPT>
+
+<script LANGUAGE="javaScript" TYPE="text/javascript">
+
+function stopDictation(){
+  window.recognition.stop();
+}
+
+  function startDictation() {
+ 
+    if (window.hasOwnProperty('webkitSpeechRecognition')) {
+      window.recognition = new webkitSpeechRecognition();
+      var recognition = window.recognition;
+ 
+      recognition.continuous = true;
+      recognition.interimResults = false;
+ 
+      recognition.lang = "en-US";
+      recognition.start();
+ 
+      recognition.onresult = function(e) {
+        window.timeToRespond = false;
+        setTimeout(function(){
+          window.timeToRespond = true;
+        },elizaMinWaitTime-100);
+        document.getElementById('transcript').value
+                                 = e.results[0][0].transcript;
+        recognition.stop();
+        window.setTimeout(elizaStep,100);
+        //document.getElementById('e_form').submit();
+        window.setTimeout(startDictation(),200);
+      };
+ 
+      recognition.onerror = function(e) {
+        recognition.stop();
+        //startDictation();
+      }
+ 
+    }
+  }
+/* SNAP */
+window.onload = function() {
+  var s = Snap("#em-container");
+  var sr = Snap("#em-radar-container");
+
+  emBody = s.circle(200, 200, 20);
+
+  emBody.attr({
+      id:"emBody"
+  });
+
+  var emHighlight = s.circle(210, 190, 3);
+
+  emHighlight.attr({
+      fill: "#ffffff"
+  });
+
+  var em = s.group(emBody, emHighlight);
+
+  var emRadar = s.circle(200, 200, 1);
+
+  var emRadarClass = "emRadar";
+  if(currentMood == "sad"){
+    emRadarClass += " sad";
+  }
+
+  emRadar.attr({
+      fill: "#FF9E9E",
+      opacity:.1,
+      id:"radar"+0
+  });
+
+  var emRadarObj = {width:0,height:0,opacity:.2};
+  
+
+  
+
+  var xPos = 0;
+  var yPos = 0;
+  var minVal = -.2;
+  var maxVal = .2;
+  var direction = 0;
+  var rInertia = 0;
+  var radars = [];
+  var radarsData = [];
+
+
+  var counter = 0;
+  window.radarBlinker = function(){
+      var object = {width:0,height:0,opacity:.2};
+      radarsData.push(object);
+      counter++;
+      var radarObj = sr.circle(xPos+200, yPos+200, 1);
+      radarObj.attr({
+          fill: "#FF9E9E",
+          opacity:.1,
+          id:"radar"+counter
+      });
+
+      $('#radar'+counter).addClass("emRadar "+currentMood);
+
+      radars[radars.length] = radarObj;
+
+      radarObj.animate({ transform: "s"+1000+" "+1000, opacity:0}, 10000 );
+
+
+      /*clearInterval(interval);
+      counter += 200;
+      interval = setInterval(myFunction, counter);*/
+  }
+  window.radarBlink = setInterval(window.radarBlinker, window.radarSpeed);
+
+
+  var emMovement = setInterval(function(){
+    var rChange = Math.random()*.2-.1;
+    rInertia += rChange;
+    direction += rInertia;
+    //console.log('r:'+rInertia+' d:'+direction+' x:'+xPos+' y:'+yPos);
+    if(xPos < -30){
+      xPos += (xPos+30)*-.05;
+    }else if (xPos > 30){
+      xPos -= (xPos-30)*.05;
+    }
+    if(yPos < -30){
+      yPos += (yPos+30)*-.05;
+    }else if (yPos > 30){
+      yPos -= (yPos-30)*.05;
+    }
+    xPos += Math.sin(direction)*5;
+    yPos += Math.cos(direction)*5;
+    if(rInertia > maxVal){
+      rInertia = maxVal;
+    }else if(rInertia < minVal){
+      rInertia = minVal;
+    }
+
+    em.animate({ transform: "t"+xPos+" "+yPos}, 200 );
+
+
+    /*
+    for(i=0;i<radars.length;i++){
+      console.log(radarsData[i].width);
+      if(Number(radarsData[i].width) > 1000){
+        console.log('big');
+        radarsData.splice(i,1);
+        radars.splice(i,1);
+      }
+      radarsData[i].width+=20;
+      radarsData[i].height+=20;
+      radarsData[i].opacity-=.005;
+      radars[i].animate({ transform: "s"+radarsData[i].width+" "+radarsData[i].height, opacity:radarsData[i].opacity}, 200 );
+    }
+*/
+
+
+    
+
+
+  },200);
+
+  var emRadarGen = setInterval(function(){
+      for(i=0;i<radars.length;i++){
+      
+      radarsData[i].width+=20;
+      radarsData[i].height+=20;
+      radarsData[i].opacity-=.005;
+      if(Number(radarsData[i].width) > 1000){
+        radarsData.splice(i,1);
+        //console.log(sr.select("#"+radars[i].id));
+        sr.select("#"+radars[i].node.id).removeData();
+        sr.select("#"+radars[i].node.id).remove();
+        //console.log(radars[i].node.id);
+        radars.splice(i,1);
+        return;
+      }
+      //radars[i].animate({ transform: "s"+radarsData[i].width+" "+radarsData[i].height, opacity:radarsData[i].opacity}, 200 );
+    }
+    },200);
+
+
+
+
+}
+
+//console.log(Math.sin(246));
+//console.log(Math.cos(246));
+
+
+</script>
+
+</HEAD>
+
+
+
+<BODY TOPMARGIN="0" LEFTMARGIN="0" RIGHTMARGIN="0" BOTTOMMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" STYLE="border:0" onload="window.setTimeout('elizaReset()',100)"><A NAME="top"></A>
+<div id = "sadBG" class = "moodBG"></div>
+<div id = "happyBG" class = "moodBG"></div>
+<svg id = "em-container"></svg>
+
+<svg id = "em-radar-container"></svg>
+
+<div id = "emReaction"></div>
+<CENTER id = "eliza">
+<P>&nbsp;</P>
+<H3 id = "elizaHeader">EM</H3>
+<TABLE BORDER="0" CELLSPACING="10" CELLPADDING="0">
+<FORM id = "e_form" NAME="e_form"  onsubmit="elizaStep();return false">
+<TR><TD COLSPAN="2"><TEXTAREA NAME="e_display" id = "e_display" COLS="60" ROWS="20"></TEXTAREA></TD></TR>
+<TR VALIGN="middle">
+	<!--<TD><INPUT TYPE="text" NAME="e_input" SIZE="50" autocomplete="off" x-webkit-speech></TD>-->
+  <TD><div class="speech">
+    <input onchange="elizaStep();return false" type="text" name="e_input" id="transcript" placeholder="Speak" autocomplete="off"/>
+    <img onclick="startDictation()" src="http://www.imgur.com/cHidSVu.gif" />
+  </div></TD>
+	<TD ALIGN="right"><INPUT TYPE="button" onclick="elizaStep();" VALUE="&nbsp;Talk&nbsp;"> <INPUT TYPE="reset" VALUE="Reset" onClick="window.setTimeout('elizaReset()',100)"><INPUT TYPE="button" onclick="stopDictation();" VALUE="&nbsp;Stop&nbsp;"></TD>
+</TR>
+</FORM>
+</TABLE>
+</CENTER>
+</BODY>
+</HTML>

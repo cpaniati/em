@@ -44,53 +44,23 @@
   vers 1.1: lambda functions in RegExps are currently a problem with too many browsers.
             changed code to work around.
 */
-
-
 function findReactionType(k){
-	console.log("reaction K:"+k);
-	switch(Number(k)) {
+	switch(k) {
     case 24:
         return 'hello';
         break;
     case 28:
         return 'I am feeling..';
         break;
-    case 281:
-        setMood('sad');
-        window.radarSpeed = 2500;
-        clearInterval(window.radarBlink);
-        window.radarBlink = setInterval(window.radarBlinker, window.radarSpeed);
+    case 25:
+        return 'sad';
         break;
-    case 282:
-        setMood('happy');
-        window.radarSpeed = 1000;
-        clearInterval(window.radarBlink);
-        window.radarBlink = setInterval(window.radarBlinker, window.radarSpeed);
+    case 25:
+        return 'happy';
         break;
     default:
         return '';
-	}
 }
-
-function setMood(mood){
-	if(mood == "sad"){
-	  $('.moodBG').removeClass('active');
-	  $('#sadBG').addClass('active');
-	  $('#emBody').removeClass();
-      $('#emBody').addClass('sad');
-      $('.emRadar').removeClass("happy sad neutral");
-      $('.emRadar').addClass('sad');
-      currentMood = "sad";
-	}else if(mood == "happy"){
-	  $('.moodBG').removeClass('active');
-	  $('#happyBG').addClass('active');
-	  $('#emBody').removeClass();
-      $('#emBody').addClass('happy');
-      $('.emRadar').removeClass("happy sad neutral");
-      $('.emRadar').addClass('happy');
-      currentMood = "happy";
-	}
-	
 }
 
 function ElizaBot(noRandomFlag) {
@@ -319,13 +289,13 @@ ElizaBot.prototype._execRule = function(k) {
 				if (ri>=reasmbs.length) {
 					ri=0;
 					this.lastchoice[k][i]=-1;
-					findReactionType(String(k)+String(i));
+					document.getElementById('emReaction').innerHTML = findReactionType(String(k)+String(i));
 
 				}
 			}
 			else {
 				this.lastchoice[k][i]=ri;
-				findReactionType(String(k)+String(i));
+				document.getElementById('emReaction').innerHTML = findReactionType(String(k)+String(i));
 			}
 			console.log("k+i="+String(k)+String(i));
 			var rpl=reasmbs[ri];
