@@ -1,0 +1,307 @@
+
+  html{
+    position:fixed;
+    height:100%;
+    width:100%;
+    border:10px solid #FF9E9E;
+    box-sizing:border-box;
+  }
+
+  .speech {border: 1px solid #DDD; width: 300px; padding: 0; margin: 0}
+  .speech input {    border: 0;
+    width: 260px;
+    display: inline-block;
+    height: 40px;
+    padding: 20px;}
+  .speech img {float: right; width: 40px }
+
+  #em-container, #em-radar-container{
+    width:100%;
+    height:100%;
+    position:fixed;
+    top:0px;
+  }
+  #em-container{
+    z-index:100;
+  }
+  #eliza{
+    font-family:avenir;
+    position:absolute;
+    z-index:1000;
+    left:-10000px;
+    opacity:0;
+  }
+
+  #e_display{
+    background: rgba(255,255,255,.7);
+    border-color: #ddd;
+  }
+
+  #sadBG{
+    position:fixed;
+    top:10px;
+    right:10px;
+    left:10px;
+    bottom:10px;
+    opacity:0;
+    transition:opacity 4s;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#bcbae2+0,9794d2+100 */
+    background: #bcbae2; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  #bcbae2 0%, #9794d2 100%); /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover,  #bcbae2 0%,#9794d2 100%); /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center,  #bcbae2 0%,#9794d2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bcbae2', endColorstr='#9794d2',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  }
+
+  #happyBG{
+    position:fixed;
+    top:10px;
+    right:10px;
+    left:10px;
+    bottom:10px;
+    opacity:0;
+    transition:opacity 4s;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fffdf4+0,fffcc2+100 */
+    background: #fffdf4; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  #fffdf4 0%, #fffcc2 100%); /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover,  #fffdf4 0%,#fffcc2 100%); /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center,  #fffdf4 0%,#fffcc2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fffdf4', endColorstr='#fffcc2',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  }
+
+   #upsetBG{
+    position:fixed;
+    top:10px;
+    right:10px;
+    left:10px;
+    bottom:10px;
+    opacity:0;
+    transition:opacity 4s;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e5c2c2+0,ae94d2+100 */
+    background: #e5c2c2; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  #e5c2c2 0%, #ae94d2 100%); /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover,  #e5c2c2 0%,#ae94d2 100%); /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center,  #e5c2c2 0%,#ae94d2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5c2c2', endColorstr='#ae94d2',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  }
+
+  #upsetBG.active{
+    opacity:1;
+  }
+
+  #sadBG.active{
+    opacity:1;
+  }
+
+  #happyBG.active{
+    opacity:1;
+  }
+
+  #emBody{
+    transition: fill 1s;
+    fill:#FF9E9E;
+  }
+
+  .emRadar{
+    transition: fill 3s;
+    fill:#FF9E9E;
+  }
+
+  .emRadar.sad{
+    fill:#986CEB;
+  }
+
+  .emRadar.happy{
+    fill:#FF9E9E;
+  }
+
+  #emBody.sad{
+    fill:#986CEB;
+  }
+
+  #emBody.happy{
+    fill:#FF9E9E;
+  }
+
+  #logo{
+    display:block;
+    left:50px;
+    top:50px;
+    width:80px;
+    position:absolute;
+    z-index:10000000;
+  }
+
+  #overlay{
+    display:none;
+    z-index:100000;
+    position:fixed;
+    top:0px;
+    width:100%;
+    height:60px;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0.9+33,0.01+100 */
+    background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 33%, rgba(255,255,255,0.01) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 33%,rgba(255,255,255,0.01) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.9) 33%,rgba(255,255,255,0.01) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#03ffffff',GradientType=0 ); /* IE6-9 */
+
+
+  }
+
+  #entry{
+    position:absolute;
+    bottom:0px;
+    right:36px;
+    color:black;
+    z-index:1000;
+    font-size:40px;
+    padding:40px;
+    font: baskerville;
+    font-style:italic;
+    width:50%;
+    height:100%;
+    padding-top:40px;
+    overflow-y: scroll; /* has to be scroll, not auto */
+    -webkit-overflow-scrolling: touch;
+    box-sizing:border-box;
+    opacity:.6;
+  }
+
+  @media screen and (max-width: 1000px) {
+    #entry {
+        font-size:30px;
+        width:65%;
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    #entry {
+        font-size:20px;
+        width:auto;
+        left:20px;
+        right:20px;
+        padding-top:130px;
+    }
+  }
+
+  #startDialog{
+    width:300px;
+    padding:30px 20px;
+    background:#FF9E9E;
+    color:white;
+    top:100px;
+    box-shadow:0px 0px 10px rgba(0,0,0,.2);
+    z-index:100000000000;
+    left:50%;
+    margin-left:-150px;
+    position:absolute;
+    font-family:avenir;
+    border-radius:4px;
+    box-sizing:border-box;
+  }
+
+  #startDialog h2{
+    text-align:center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  #startDialog p{
+    margin-top:5px;
+    margin-bottom:0px;
+  }
+
+  #startDialog #start{
+    padding:10px;
+    margin:auto;
+    background:white;
+    color:#FF9E9E;
+    width:60px;
+    text-align:center;
+    border-radius:4px;
+    margin-top:20px;
+    cursor:pointer;
+  }
+
+  #recognitionRestart{
+    position:absolute;
+    bottom:0px;
+    left:0px;
+    padding-right:10px;
+    padding-top:10px;
+    background:#FF9E9E;
+    border-top-right-radius:4px;
+    z-index:1000000000;
+    display:none!important;
+  }
+
+  #recognitionRestart>div{
+    width:20px;
+    height:20px;
+    border:3px solid white;
+    background:#FF3E3E;
+    border-radius:20px;
+    cursor:pointer;
+  }
+
+  #recognitionRestart>div:hover{
+    background:#FF0E0E;
+  }
+
+  #emCaption{
+    position:absolute;
+    background:#4292EF;
+    padding:20px;
+    border-radius:1000px;
+    color:white;
+    font-family:avenir;
+    max-width:250px;
+    z-index:100000000000000;
+    display:none;
+  }
+
+  #logout{
+    position:absolute;
+    background:#FF9E9E;
+    padding-bottom:10px;
+    padding-left:10px;
+    padding-right:5px;
+    padding-top:5px;
+    top:0px;
+    right:0px;
+    color:white;
+    display:none;
+    font-family:avenir;
+    z-index:100000000000000;
+    border-bottom-left-radius:4px;
+  }
+
+
+
+  /*
+  #entry>.sentence:first-letter{
+    text-transform:capitalize;
+  }
+
+  #entry>.sentence>span:first-child{
+    text-transform:capitalize;
+  }*/
+
+  @-webkit-keyframes fadeIn { 0% { opacity:0; color:#FF9E9E; } 50% { opacity:1; color:#FF9E9E; } 100% { opacity:1; color:#222; }}
+  @-moz-keyframes fadeIn { 0% { opacity:0; color:#FF9E9E; } 50% { opacity:1; color:#FF9E9E; } 100% { opacity:1; color:#222; } }
+  @keyframes fadeIn { 0% { opacity:0; color:#FF9E9E; } 50% { opacity:1; color:#FF9E9E; } 100% { opacity:1; color:#222; } }
+
+  .sentence>span{
+    opacity:0;
+    -webkit-animation:fadeIn ease-in 1;  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+    -moz-animation:fadeIn ease-in 1;
+    animation:fadeIn ease-in 1;
+   
+    -webkit-animation-fill-mode:forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+    -moz-animation-fill-mode:forwards;
+    animation-fill-mode:forwards;
+   
+    -webkit-animation-duration:.5s;
+    -moz-animation-duration:.5s;
+    animation-duration:.5s;
+  }

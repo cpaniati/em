@@ -66,7 +66,9 @@ var elizaSynons = {
 "family": ["mother", "mom", "father", "dad", "sister", "brother", "wife", "children", "child"],
 "happy": ["elated", "glad", "better","good","peachy","great","super","awesome","fantastic","fabulous","amazing","well","blessed"],
 "sad": ["unhappy", "depressed", "sick","awful","shit","shitty","bad","terrible","horrible","down","gloomy","low","blegh","bummed"],
-"neutral": ["okay", "OK", "Ok", "alright", "fine"]
+"neutral": ["okay", "OK", "Ok", "alright", "fine"],
+"upset": ["angry", "mad", "pissed", "frustrated"],
+"bad": ["terrible", "awful", "hard", "difficult", "frustrating", "long"]
 };
 
 var elizaKeywords = [
@@ -324,6 +326,16 @@ var elizaKeywords = [
   ]]
 ]],
 ["i", 0, [
+  ["* i had* @bad day", [
+     "I am sorry to hear that you you're having a (3) day !",
+     "That sounds rough. What helps you turn things around when you're having a (3) day ?",
+     "Can you explain what made your day (3) ?"
+  ]],
+  ["* i am having* @bad day", [
+     "I am sorry to hear that you you're having a (3) day !",
+     "That sounds rough. What helps you turn things around when you're having a (3) day ?",
+     "Can you explain what made your day (3) ?"
+  ]],
  ["* i @desire *", [
      "What would it mean to you if you got (3) ?",
      "Why do you want (3) ?",
@@ -342,6 +354,10 @@ var elizaKeywords = [
      "Can you explain why you are suddenly (3) ?"
   ]],
   ["* i am* @neutral *", [
+     "What makes you (3) just now ?",
+     "Can you explain why you are suddenly (3) ?"
+  ]],
+  ["* i am* @upset *", [
      "What makes you (3) just now ?",
      "Can you explain why you are suddenly (3) ?"
   ]],

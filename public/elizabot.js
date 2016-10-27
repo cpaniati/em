@@ -55,19 +55,40 @@ function findReactionType(k){
     case 28:
         return 'I am feeling..';
         break;
-    case 281:
+    case 283:
         setMood('sad');
+        window.emotionFlag = "sad";
         window.radarSpeed = 2500;
+        window.emSpeed = 3;
         clearInterval(window.radarBlink);
         window.radarBlink = setInterval(window.radarBlinker, window.radarSpeed);
         break;
-    case 282:
+    case 284:
         setMood('happy');
+        window.emotionFlag = "happy";
         window.radarSpeed = 1000;
+        window.emSpeed = 15;
+        clearInterval(window.radarBlink);
+        window.radarBlink = setInterval(window.radarBlinker, window.radarSpeed);
+        break;
+    case 285:
+    	window.emotionFlag = "";
+        setMood('neutral');
+        window.radarSpeed = 2000;
+        window.emSpeed = 5;
+        clearInterval(window.radarBlink);
+        window.radarBlink = setInterval(window.radarBlinker, window.radarSpeed);
+        break;
+    case 286:
+        setMood('upset');
+        window.emotionFlag = "upset";
+        window.radarSpeed = 2000;
+        window.emSpeed = 7;
         clearInterval(window.radarBlink);
         window.radarBlink = setInterval(window.radarBlinker, window.radarSpeed);
         break;
     default:
+    	window.emotionFlag = "";
         return '';
 	}
 }
@@ -78,7 +99,7 @@ function setMood(mood){
 	  $('#sadBG').addClass('active');
 	  $('#emBody').removeClass();
       $('#emBody').addClass('sad');
-      $('.emRadar').removeClass("happy sad neutral");
+      $('.emRadar').removeClass("happy sad neutral upset");
       $('.emRadar').addClass('sad');
       currentMood = "sad";
 	}else if(mood == "happy"){
@@ -86,11 +107,23 @@ function setMood(mood){
 	  $('#happyBG').addClass('active');
 	  $('#emBody').removeClass();
       $('#emBody').addClass('happy');
-      $('.emRadar').removeClass("happy sad neutral");
+      $('.emRadar').removeClass("happy sad neutral upset");
       $('.emRadar').addClass('happy');
       currentMood = "happy";
+	}else if(mood == "neutral"){
+	  $('.moodBG').removeClass('active');
+	  $('#emBody').removeClass();
+      $('.emRadar').removeClass("happy sad neutral upset");
+      currentMood = "neutral";
+	}else if(mood == "upset"){
+	  $('.moodBG').removeClass('active');
+	  $('#upsetBG').addClass('active');
+	  $('#emBody').removeClass();
+      $('#emBody').addClass('upset');
+      $('.emRadar').removeClass("happy sad neutral upset");
+      $('.emRadar').addClass('upset');
+      currentMood = "upset";
 	}
-	
 }
 
 function ElizaBot(noRandomFlag) {
