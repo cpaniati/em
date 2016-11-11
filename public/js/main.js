@@ -58,6 +58,7 @@ window.fbAsyncInit = function() {
 
 
   function startNewFirebaseEntry(){
+    var today = String(new Date());
     console.log('hit');
     var userRef = database.ref('users');
     userRef.child(window.user.userID).once('value').then(function(snapshot) {
@@ -81,9 +82,9 @@ window.fbAsyncInit = function() {
         console.log("user already exists");
         var userPostsRef = database.ref('users/' + window.user.userID).child('posts');
         var newPostRef = userPostsRef.push({
-          date: 'thursday',
-          text: "blank2",
-          convoTime: 1001
+          date: today,
+          text: "blank..",
+          convoTime: 0
         },function(){
           window.user.currentPost.key = newPostRef.key;
           console.log(window.user.currentPost.key);
@@ -94,7 +95,60 @@ window.fbAsyncInit = function() {
 
     });
     startEntryTimer();
-    
+    getEntries();
+  }
+
+
+
+  function startNewFirebaseChat(){
+    var today = String(new Date());
+    var chatRef = database.ref('chats');
+    var newPostRef = chatRef.push({
+          date: today,
+          convoTime: 0,
+        },function(){
+
+          window.user.currentChat.key = newPostRef.key;
+          console.log(window.user.currentChat.key);
+
+          var newPostRef = userPostsRef.set({
+            date: today,
+            convoTime: 0,
+          },function(){
+            window.user.currentChat.key = newPostRef.key;
+            console.log(window.user.currentChat.key);
+          });
+
+        });
+
+  }
+
+  function chatPost(text){
+    var today = String(new Date());
+    var chatRef = database.ref('chats/'+window.user.currentChat.key+'posts/');
+    chatRef.push({
+          date: today,
+          text: text,
+          convoTime: 0
+        },function(){
+          window.user.currentPost.key = newPostRef.key;
+          console.log(window.user.currentPost.key);
+        });
+  }
+
+
+
+  function getEntries(){
+      database.ref('users/' + window.user.userID).child('posts').once('value').then(function(snapshot) {
+          
+        snapshot.forEach(function (snapshot,i) {
+           var obj = snapshot.val();
+           if(obj.text !== "blank.."){
+              $('#entries').append("<div class = 'entry' entry-num='"+i+"'><h3>"+obj.date+"</h3><p>"+obj.text+"</p></div>");
+           }
+        });
+        
+      });
   }
 
 
@@ -128,6 +182,17 @@ window.fbAsyncInit = function() {
 
 
   $(document).ready(function(){
+
+    $('#viewEntries').click(function(){
+      $('#entriesWrap').toggleClass('active');
+    });
+
+    $('#entriesWrap').click(function(){
+      $('#entriesWrap').removeClass('active');
+    }).children().click(function(e) {
+      e.stopPropagation();
+      return false;
+    });
 
     document.getElementById('start').onclick = function(){
         FB.getLoginStatus(function(response) {
@@ -347,6 +412,13 @@ function elizaStep() {
 }
 
 
+function startCall(){
+
+}
+
+
+window.inCall = false;
+
 
 function recognitionRestart(){
   stopDictation();
@@ -373,10 +445,15 @@ function stopDictation(){
         setTimeout(function(){
           window.timeToRespond = true;
         },elizaMinWaitTime-100);
-        document.getElementById('transcript').value
-                                 = e.results[0][0].transcript;
+        document.getElementById('transcript').value= e.results[0][0].transcript;
+        if(window.inCall){
+          sendChat();
+        }else{
+           window.setTimeout(elizaStep,100);
+        }
+        
         recognition.stop();
-        window.setTimeout(elizaStep,100);
+       
         //document.getElementById('e_form').submit();
         //window.setTimeout(startDictation(),200);
       };
