@@ -2,9 +2,11 @@
 // entries prestructured as layed out in Weizenbaum's description 
 // [cf: Communications of the ACM, Vol. 9, #1 (January 1966): p 36-45.]
 
+window.userData = {first_name:''};
+
 var elizaInitials = [
-"Hi! How are you feeling today ?",
-"Hey there. What's new ?"
+"Hey "+window.userData.first_name+"! How are you feeling today ?",
+"Hi "+window.userData.first_name+". What's new ?"
 ];
 
 var elizaFinals = [

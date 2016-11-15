@@ -166,6 +166,7 @@
     -webkit-overflow-scrolling: touch;
     box-sizing:border-box;
     opacity:.6;
+    outline: 0;
   }
 
   @media screen and (max-width: 1000px) {
@@ -224,6 +225,35 @@
     cursor:pointer;
   }
 
+  @-webkit-keyframes record {
+    0%   { background-color: #FF4242; }
+    25%   { background-color: #FFA2A2; }
+    50%   { background-color: #FF4242; }
+    75%   { background-color: #DC0707; }
+    100% { background-color: #FF4242; }
+  }
+  @-moz-keyframes record {
+    0%   { background-color: #FF4242; }
+    25%   { background-color: #FFA2A2; }
+    50%   { background-color: #FF4242; }
+    75%   { background-color: #DC0707; }
+    100% { background-color: #FF4242; }
+  }
+  @-o-keyframes record {
+    0%   { background-color: #FF4242; }
+    25%   { background-color: #FFA2A2; }
+    50%   { background-color: #FF4242; }
+    75%   { background-color: #DC0707; }
+    100% { background-color: #FF4242; }
+  }
+  @keyframes record {
+    0%   { background-color: #FF4242; }
+    25%   { background-color: #FFA2A2; }
+    50%   { background-color: #FF4242; }
+    75%   { background-color: #DC0707; }
+    100% { background-color: #FF4242; }
+  }
+
   #recognitionRestart{
     position:absolute;
     bottom:0px;
@@ -233,19 +263,46 @@
     background:#FF9E9E;
     border-top-right-radius:4px;
     z-index:1000000000;
-    display:none!important;
+    display:none;
   }
 
-  #recognitionRestart>div{
+  #recognitionRestart>.outer{
     width:20px;
     height:20px;
     border:3px solid white;
-    background:#FF3E3E;
     border-radius:20px;
+    cursor:pointer;
+    box-sizing:border-box;
+    overflow:hidden;
+    background:white;
+  }
+
+  #recognitionRestart .inner{
+    width:20px;
+    height:20px;
+    background:#FF4242;
     cursor:pointer;
   }
 
-  #recognitionRestart>div:hover{
+  #recognitionRestart.active>.outer{
+    /* -webkit-animation: record 1.5s infinite; 
+    -moz-animation:    record 1.5s infinite; 
+    -o-animation:      record 1.5s infinite; 
+    animation:         record 1.5s infinite;*/
+  }
+
+  #recognitionRestart.active .inner{
+    border-radius: 2px;
+    width: 10px;
+    height: 10px;
+    margin: 2px;
+    /* -webkit-animation: record 1.5s infinite; 
+    -moz-animation:    record 1.5s infinite; 
+    -o-animation:      record 1.5s infinite; 
+    animation:         record 1.5s infinite;*/
+  }
+
+  #recognitionRestart>.outer .inner:hover{
     background:#FF0E0E;
   }
 
@@ -256,7 +313,7 @@
     border-radius:1000px;
     color:white;
     font-family:avenir;
-    max-width:250px;
+    max-width:300px;
     z-index:100000000000000;
     display:none;
   }
@@ -292,6 +349,7 @@
     z-index:100000000000000;
     border-top-left-radius:4px;
     cursor:pointer;
+    display:none;
   }
 
   #startCall{
@@ -313,7 +371,8 @@
 
   #entries{
     position:absolute;
-    overflow:auto;
+    overflow-y: scroll; /* has to be scroll, not auto */
+    -webkit-overflow-scrolling: touch;
     top:40px;
     bottom:40px;
     left:10px;
@@ -325,6 +384,16 @@
     padding:20px;
     color:#222;
     font-family:avenir;
+  }
+
+  #closeEntries{
+    position:absolute;
+    top:0px;
+    right:0px;
+    padding:5px;
+    color:white;
+    font-size:20px;
+    cursor:pointer;
   }
 
   #entriesWrap{

@@ -2,7 +2,7 @@
 <HEAD>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 	<TITLE>EM [by HelloPress]</TITLE>
-  <link href="http://emojicss.com/emoji.css" rel="stylesheet">
+  <link href="css/emoji.css" rel="stylesheet">
   <!-- CSS Styles -->
   <link rel="stylesheet" type="text/css" href="css/master.css">
 
@@ -31,12 +31,12 @@
 
 </HEAD>
 
-<div id = "recognitionRestart"><div></div></div>
+<div id = "recognitionRestart"><div class = "outer"><div class = "inner"></div></div></div>
 
-<BODY TOPMARGIN="0" LEFTMARGIN="0" RIGHTMARGIN="0" BOTTOMMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" STYLE="border:0" onload="window.setTimeout('elizaReset()',100)"><A NAME="top"></A>
+<BODY TOPMARGIN="0" LEFTMARGIN="0" RIGHTMARGIN="0" BOTTOMMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" STYLE="border:0"><A NAME="top"></A>
 
 <div id = "overlay"></div>
-<div id = "entry"></div>
+<div id = "entry" contentEditable></div>
 <div id = "emCaption"></div>
 
 <div id = "startDialog">
@@ -50,10 +50,11 @@
 <div id = "logout">logout</div>
 
 <div id = "viewEntries">My Entries</div>
-
-<div id = "startCall">Talk</div>
+<!--
+<div id = "startCall">Talk</div>-->
 
 <div id = "entriesWrap">
+  <div id = "closeEntries">✕</div>
   <div id = "entries"></div>
 </div>
 
@@ -76,7 +77,7 @@
 	<!--<TD><INPUT TYPE="text" NAME="e_input" SIZE="50" autocomplete="off" x-webkit-speech></TD>-->
   <TD><div class="speech">
     <input onchange="elizaStep();return false" type="text" name="e_input" id="transcript" placeholder="Speak" autocomplete="off"/>
-    <img onclick="startDictation()" src="http://www.imgur.com/cHidSVu.gif" style = "background: rgba(255,255,255,.5);" />
+    <img onclick="startDictation()" src="img/mic.gif" style = "background: rgba(255,255,255,.5);" />
   </div></TD>
 	<TD ALIGN="right"><INPUT TYPE="button" onclick="elizaStep();" VALUE="&nbsp;Talk&nbsp;"> <INPUT TYPE="reset" VALUE="Reset" onClick="window.setTimeout('elizaReset()',100)"><INPUT TYPE="button" onclick="stopDictation();" VALUE="&nbsp;Stop&nbsp;"></TD>
 </TR>

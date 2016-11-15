@@ -13,6 +13,30 @@ var config = {
 
 
 
+    // Opera 8.0+
+var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    // Firefox 1.0+
+var isFirefox = typeof InstallTrigger !== 'undefined';
+    // Safari 3.0+ "[object HTMLElementConstructor]" 
+var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
+    // Internet Explorer 6-11
+var isIE = /*@cc_on!@*/false || !!document.documentMode;
+    // Edge 20+
+var isEdge = !isIE && !!window.StyleMedia;
+    // Chrome 1+
+var isChrome = !!window.chrome && !!window.chrome.webstore;
+    // Blink engine detection
+var isBlink = (isChrome || isOpera) && !!window.CSS;
+
+
+function getFirstWord(str) {
+        if (str.indexOf(' ') === -1)
+            return str;
+        else
+            return str.substr(0, str.indexOf(' '));
+    };
+
+
 
 window.fbAsyncInit = function() {
     FB.init({
@@ -34,7 +58,6 @@ window.fbAsyncInit = function() {
    }(document, 'script', 'facebook-jssdk'));
 
 
-
   
 
   function statusChangeCallback(response){
@@ -42,6 +65,17 @@ window.fbAsyncInit = function() {
     if(response.status == 'connected'){
         window.user = response.authResponse;
         window.user.currentPost = {key:null,text:''};
+        FB.api('/me', function(response) {
+          window.userData = {first_name:getFirstWord(response.name)};
+          elizaInitials = [
+            "Hey "+window.userData.first_name+"! How are you feeling today ?",
+            "Hi "+window.userData.first_name+". What's new ?"
+          ];
+          console.log(window.userData.first_name);
+          console.log(response);
+          console.log('Successful login for: ' + response.name);
+          window.setTimeout("elizaReset()",100);
+        });
         startJournal();
     }else{
       FB.login(function(response){
@@ -99,7 +133,7 @@ window.fbAsyncInit = function() {
   }
 
 
-
+  /*
   function startNewFirebaseChat(){
     var today = String(new Date());
     var chatRef = database.ref('chats');
@@ -136,6 +170,9 @@ window.fbAsyncInit = function() {
         });
   }
 
+  */
+
+
 
 
   function getEntries(){
@@ -159,9 +196,13 @@ window.fbAsyncInit = function() {
     },1000);
   }
 
-
+  function get_content(elementID){
+   var html = document.getElementById(elementID).innerHTML;
+   return html.replace(/<[^>]*>/g, "");
+  }
 
   function entryUpdated(){
+        window.user.currentPost.text = get_content('entry');
         var today = String(new Date());
         database.ref('users/' + window.user.userID).child('posts').child(window.user.currentPost.key).set({
           date: today,
@@ -187,7 +228,7 @@ window.fbAsyncInit = function() {
       $('#entriesWrap').toggleClass('active');
     });
 
-    $('#entriesWrap').click(function(){
+    $('#entriesWrap, #closeEntries').click(function(){
       $('#entriesWrap').removeClass('active');
     }).children().click(function(e) {
       e.stopPropagation();
@@ -195,9 +236,21 @@ window.fbAsyncInit = function() {
     });
 
     document.getElementById('start').onclick = function(){
-        FB.getLoginStatus(function(response) {
-            statusChangeCallback(response);
+        FB.login(function(response){
+          if(isChrome){
+            $('#recognitionRestart').show();
+          }
+          $('#viewEntries').show();
+          window.user = null;
+          statusChangeCallback(response);
         });
+        /*FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });*/
+    };
+
+    document.getElementById('entry').onblur = function(){
+        entryUpdated();
     };
 
     document.getElementById('logout').onclick = function(){
@@ -207,9 +260,10 @@ window.fbAsyncInit = function() {
     };
 
     $('#recognitionRestart').click(function(){
+      $('#recognitionRestart').toggleClass('active');
       recognitionRestart();
-      var f = document.forms.e_form;
-      f.e_input.focus();
+      //var f = document.forms.e_form;
+      //f.e_input.focus();
     });
 
   });
@@ -218,6 +272,7 @@ function startJournal(){
   $('#logout').show();
   $('#startDialog').fadeOut();
   startDictation();
+  $('#recognitionRestart').toggleClass('active');
   var f = document.forms.e_form;
   f.e_input.focus();
   startNewFirebaseEntry();
@@ -331,10 +386,14 @@ function elizaSpeak(text){
 }
 
 
-function elizaStep() {
+function elizaStep(text) {
+
   console.log('elizaStep');
 	var f = document.forms.e_form;
 	var userinput = f.e_input.value;
+  if(text){
+    userinput = text;
+  }
 	if (eliza.quit) {
 		f.e_input.value = '';
 		if (confirm("This session is over.\nStart over?")) elizaReset();
@@ -350,7 +409,8 @@ function elizaStep() {
       punctuation = ".";
     }
     $('#entry').append("<span class = 'sentence'></span>");
-    window.user.currentPost.text += userinput+punctuation+" ";
+    //window.user.currentPost.text += userinput+punctuation+" ";
+    window.user.currentPost.text = get_content('entry');
     entryUpdated();
     typeItOut(userinput+punctuation+" ",0,$('.sentence').last(),"");
     elizaLines.push(usr);
@@ -411,65 +471,84 @@ function elizaStep() {
   //window.setTimeout(startDictation,100);
 }
 
-
+/*
 function startCall(){
 
 }
 
 
 window.inCall = false;
+*/
 
+window.recording = true;
 
 function recognitionRestart(){
-  stopDictation();
-  startDictation();
+  if(window.recording == false){
+    window.recording = true;
+    startDictation();
+  }else{
+    window.recording = false;
+    stopDictation();
+  }
+  
 }
+
+
+      
+      if (window.hasOwnProperty('webkitSpeechRecognition')) {
+        console.log('start!!!');
+        window.recognition = new webkitSpeechRecognition();
+   
+        window.recognition.continuous = true;
+        window.recognition.interimResults = false;
+   
+        window.recognition.lang = "en-US";
+        //window.recognition.start();
+   
+        window.recognition.onresult = function(e) {
+          console.log('result!!!'+e.results[0][0].transcript);
+          console.log(e);
+          window.timeToRespond = false;
+          setTimeout(function(){
+            window.timeToRespond = true;
+          },elizaMinWaitTime-100);
+          document.getElementById('transcript').value= e.results[0][0].transcript;
+          window.setTimeout(elizaStep,100);
+          
+          window.recognition.stop();
+         
+          //document.getElementById('e_form').submit();
+          //window.setTimeout(startDictation(),200);
+        };
+
+        window.recognition.onend = function() {
+          console.log('ended!!!');
+            if(window.recording){
+              window.recognition.start();
+            }
+        };
+   
+        window.recognition.onerror = function(e) {
+          console.log('error!!!');
+          window.recognition.stop();
+        }
+
+      }
+
 
 function stopDictation(){
   window.recognition.stop();
 }
 
   function startDictation() {
-    if (window.hasOwnProperty('webkitSpeechRecognition')) {
-      window.recognition = new webkitSpeechRecognition();
-      var recognition = window.recognition;
- 
-      recognition.continuous = true;
-      recognition.interimResults = false;
- 
-      recognition.lang = "en-US";
-      recognition.start();
- 
-      recognition.onresult = function(e) {
-        window.timeToRespond = false;
-        setTimeout(function(){
-          window.timeToRespond = true;
-        },elizaMinWaitTime-100);
-        document.getElementById('transcript').value= e.results[0][0].transcript;
-        if(window.inCall){
-          sendChat();
-        }else{
-           window.setTimeout(elizaStep,100);
-        }
-        
-        recognition.stop();
-       
-        //document.getElementById('e_form').submit();
-        //window.setTimeout(startDictation(),200);
-      };
-
-      recognition.onend = function() {
-           recognitionRestart();
-      };
- 
-      recognition.onerror = function(e) {
-        recognition.stop();
-      }
+    window.recognition.start();
  
     }
-  }
+  
 /* SNAP */
 window.onload = function() {
+  //window.setTimeout('elizaReset()',100);
+  console.log('onload fired');
   var s = Snap("#em-container");
   var sr = Snap("#em-radar-container");
 
@@ -579,20 +658,7 @@ window.onload = function() {
     em.animate({ transform: "t"+xPos+" "+yPos}, 200 );
 
 
-    /*
-    for(i=0;i<radars.length;i++){
-      console.log(radarsData[i].width);
-      if(Number(radarsData[i].width) > 1000){
-        console.log('big');
-        radarsData.splice(i,1);
-        radars.splice(i,1);
-      }
-      radarsData[i].width+=20;
-      radarsData[i].height+=20;
-      radarsData[i].opacity-=.005;
-      radars[i].animate({ transform: "s"+radarsData[i].width+" "+radarsData[i].height, opacity:radarsData[i].opacity}, 200 );
-    }
-*/
+    
 
 
     
